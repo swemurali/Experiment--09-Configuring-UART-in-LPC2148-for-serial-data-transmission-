@@ -1,10 +1,7 @@
 # Experiment--09-Configuring-UART-in-LPC2148-for-serial-data-transmission-
 
-Name :	
-Roll no 
-Date of experiment :
-
-
+Name :	M.suwetha
+Roll no: 212221230112
 
  Date: 
 ### Configuring UART in LPC2148 for serial data transmission 
@@ -49,27 +46,38 @@ UART0 Line Control Register (U0LCR): The Line Control Register is used to set th
 ## Figure -02 UART interface virtual terminal
 
 ### Kiel - Program 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```
+#include <LPC214x.H>              // LPC21xx definitions                      */
+char a;
+void uart0_init(){
+  PINSEL0 = 0x00000005;           // Enable RxD0 and TxD0                     */
+  U0LCR = 0x83;                   // 8 bits, no Parity, 1 Stop bit            */
+  U0DLL = 97;                     // 9600 Baud Rate @ 15MHz VPB Clock         */
+  U0LCR = 0x03;                   // DLAB = 0                                 */
+}
+void uart0_putc(char c){
+ while(!(U0LSR & 0x20)); // Wait until UART0 ready to send character  
+ U0THR = c; // Send character
+}
+int uart1_getc (void)  {                     
+  while (!(U0LSR & 0x01));
+  return (U0RBR);
+}
+int main (void)  {                
+  uart0_init();      
+  while (1) {                          
+  a=uart0_getc();
+   uart0_putc(a);
+  }                               
+}
+```
 ### Result :
 UART is programmed for transmitting serial data on virtual terminal  
 
 ### Output screen shots :
+![swe ex-09](https://user-images.githubusercontent.com/94165336/204072543-a47215fa-59dd-47ba-8d47-a4a327c270cd.png)
+![ex-09 swe](https://user-images.githubusercontent.com/94165336/204072545-758d2064-c9b8-4d2d-97eb-9d58ffee0613.png)
+![ex-09](https://user-images.githubusercontent.com/94165336/204072547-5fa6f67f-bcc3-4ba2-a60d-85365d0c34bf.png)
+![swe ex-09](https://user-images.githubusercontent.com/94165336/204072548-d9eeca5d-6dc1-417b-9ea4-f4694ed6a132.png)
+
 
